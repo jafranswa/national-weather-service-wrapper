@@ -18,6 +18,8 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.json:json:20210307")
+	implementation ("javax.json:javax.json-api:1.1.4")
 	testImplementation("org.springframework.boot:spring-boot-starter-test"){
 		exclude(module = "junit")
 	}

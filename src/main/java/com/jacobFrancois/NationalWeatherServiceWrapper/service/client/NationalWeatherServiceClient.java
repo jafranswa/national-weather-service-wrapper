@@ -17,15 +17,17 @@ public class NationalWeatherServiceClient {
     }
 
     public Mono<String> fetchLocationMetaDataByLatLong(String latitude, String longitude) {
+        String uri = "/points/" + latitude + "," + longitude;
         return this.webClient.get()
-                .uri("/points/" + latitude + "," + longitude)
+                .uri(uri)
                 .retrieve()
                 .bodyToMono(String.class);
     }
 
     public Mono<String> fetchForcastData(String url) {
+        String uri = removeBaseUrl(url);
         return this.webClient.get()
-                .uri(removeBaseUrl(url))
+                .uri(uri)
                 .retrieve()
                 .bodyToMono(String.class);
     }
