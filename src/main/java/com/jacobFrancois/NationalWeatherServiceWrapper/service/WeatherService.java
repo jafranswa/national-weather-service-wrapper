@@ -17,7 +17,7 @@ public class WeatherService {
         this.weatherServiceClient = weatherServiceClient;
     }
 
-    public String getHighLowTemps(String latitude, String longitude) {
+    public String getHighLowTempsForcast(String latitude, String longitude) {
         String locationMetaData = weatherServiceClient.fetchLocationMetaDataByLatLong(
                         formatLatLong(latitude),
                         formatLatLong(longitude))

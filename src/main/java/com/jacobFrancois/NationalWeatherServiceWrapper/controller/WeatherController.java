@@ -1,6 +1,7 @@
 package com.jacobFrancois.NationalWeatherServiceWrapper.controller;
 
 import com.jacobFrancois.NationalWeatherServiceWrapper.service.WeatherService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,13 +21,34 @@ public class WeatherController {
             @RequestParam("latitude") String latitude,
             @RequestParam("longitude") String longitude) {
 
+        if (!validLatLong(latitude, longitude)) {
+            return ResponseEntity.badRequest().body("Latitude and longitude are required parameters and must be numeric values.");
+        }
 
-//        String latitude = "39.7349";
-//        String longitude = "-104.972";
+        // carry out request
+        String weatherTempForcastJson = weatherService.getHighLowTempsForcast(latitude, longitude);
 
-        // todo replace this with a call to something that returns the highs and lows for the days
-        String weather = weatherService.getHighLowTemps(latitude, longitude);
+        return ResponseEntity.status(HttpStatus.OK)
+                .header("Content-Type", "application/json")
+                .body(weatherTempForcastJson);
+    }
 
-        return ResponseEntity.ok().body(weather);
+    private boolean validLatLong(String latitude, String longitude) {
+        // return error if request parameters are not present
+        if ((latitude == null || longitude == null) || (latitude.equals("") || longitude.equals(""))) {
+            return false;
+        }
+
+        // return error if request parameters are not numeric values
+        double lat;
+        double lon;
+        try {
+            lat = Double.parseDouble(latitude);
+            lon = Double.parseDouble(longitude);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        return true;
     }
 }
