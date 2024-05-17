@@ -6,9 +6,6 @@ import com.jacobFrancois.NationalWeatherServiceWrapper.service.client.NationalWe
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import javax.json.*;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.text.DecimalFormat;
 
 @Service
@@ -26,7 +23,7 @@ public class WeatherService {
                         formatLatLong(longitude))
                 .block();
 
-        String forcastData = getForcastData(locationMetaData).block();
+        String forcastData = fetchLocationForcast(locationMetaData).block();
         JSONObject forcastHighLowJson = buildWeeklyForcastHighLowJson(forcastData);
         return forcastHighLowJson.toString();
     }
@@ -37,11 +34,7 @@ public class WeatherService {
         return decimalFormat.format(latLong);
     }
 
-    public Mono<String> getLocationMetadata(String latitude, String longitude) {
-        return weatherServiceClient.fetchLocationMetaDataByLatLong(latitude, longitude);
-    }
-
-    public Mono<String> getForcastData(String json) {
+    public Mono<String> fetchLocationForcast(String json) {
         String forcastUrl = getForcastUrl(json);
         Mono<String> data = weatherServiceClient.fetchForcastData(forcastUrl);
         return data;
@@ -59,7 +52,6 @@ public class WeatherService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return forecastUrl;
     }
 
