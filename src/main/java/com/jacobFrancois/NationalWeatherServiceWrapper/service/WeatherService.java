@@ -17,14 +17,14 @@ public class WeatherService {
         this.weatherServiceClient = weatherServiceClient;
     }
 
-    public String getHighLowTempsForcast(String latitude, String longitude) {
+    public String getHighLowTempsForecast(String latitude, String longitude) {
         String locationMetaData = weatherServiceClient.fetchLocationMetaDataByLatLong(
                         formatLatLong(latitude),
                         formatLatLong(longitude))
                 .block();
 
-        String forcastData = fetchLocationForcast(locationMetaData).block();
-        JSONObject forcastHighLowJson = buildWeeklyForcastHighLowJson(forcastData);
+        String forcastData = fetchLocationForecast(locationMetaData).block();
+        JSONObject forcastHighLowJson = buildWeeklyForecastHighLowJson(forcastData);
         return forcastHighLowJson.toString();
     }
 
@@ -34,19 +34,19 @@ public class WeatherService {
         return decimalFormat.format(latLong);
     }
 
-    public Mono<String> fetchLocationForcast(String json) {
-        String forcastUrl = getForcastUrl(json);
-        Mono<String> data = weatherServiceClient.fetchForcastData(forcastUrl);
+    public Mono<String> fetchLocationForecast(String json) {
+        String forcastUrl = getForecastUrl(json);
+        Mono<String> data = weatherServiceClient.fetchForecastData(forcastUrl);
         return data;
     }
 
-    public String getForcastUrl(String json) {
+    public String getForecastUrl(String json) {
         String forecastUrl = "";
         try {
             // Parse JSON string to JSONObject
             JSONObject jsonObject = new JSONObject(json);
 
-            // Navigate to properties and get forecastHourly value
+            // Navigate to properties and get forecast value
             JSONObject properties = jsonObject.getJSONObject("properties");
             forecastUrl = properties.getString("forecast");
         } catch (Exception e) {
@@ -55,7 +55,7 @@ public class WeatherService {
         return forecastUrl;
     }
 
-    public JSONObject buildWeeklyForcastHighLowJson(String forecastData) {
+    public JSONObject buildWeeklyForecastHighLowJson(String forecastData) {
 
         // Parse the original JSON
         JSONObject originalJsonObject = new JSONObject(forecastData);

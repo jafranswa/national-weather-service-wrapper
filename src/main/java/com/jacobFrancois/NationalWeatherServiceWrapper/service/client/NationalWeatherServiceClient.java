@@ -1,6 +1,5 @@
 package com.jacobFrancois.NationalWeatherServiceWrapper.service.client;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -11,9 +10,8 @@ public class NationalWeatherServiceClient {
     private final WebClient webClient;
     private static final String BASE_URL = "https://api.weather.gov/";
 
-    @Autowired
     public NationalWeatherServiceClient(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl(BASE_URL).build();
+        this.webClient = webClientBuilder.baseUrl(BASE_URL).build();;
     }
 
     public Mono<String> fetchLocationMetaDataByLatLong(String latitude, String longitude) {
@@ -24,7 +22,7 @@ public class NationalWeatherServiceClient {
                 .bodyToMono(String.class);
     }
 
-    public Mono<String> fetchForcastData(String url) {
+    public Mono<String> fetchForecastData(String url) {
         String uri = removeBaseUrl(url);
         return this.webClient.get()
                 .uri(uri)

@@ -26,7 +26,7 @@ public class WeatherController {
         }
 
         // carry out request
-        String weatherTempForcastJson = weatherService.getHighLowTempsForcast(latitude, longitude);
+        String weatherTempForcastJson = weatherService.getHighLowTempsForecast(latitude, longitude);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header("Content-Type", "application/json")

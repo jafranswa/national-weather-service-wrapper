@@ -39,26 +39,26 @@ public class WeatherServiceTest {
     }
 
     @Test
-    public void testGetForcastUrl() {
+    public void testGetForecastUrl() {
         String json = "{ \"properties\": { \"forecast\": \"https://api.weather.gov/gridpoints/BOU/62,61/forecast\" } }";
         String expectedUrl = "https://api.weather.gov/gridpoints/BOU/62,61/forecast";
-        assertEquals(weatherService.getForcastUrl(json), expectedUrl);
+        assertEquals(weatherService.getForecastUrl(json), expectedUrl);
 
         // Test case with missing "forecast" property
         String jsonMissingForecast = "{ \"properties\": { \"anotherProperty\": \"someValue\" } }";
-        assertEquals(weatherService.getForcastUrl(jsonMissingForecast), "");
+        assertEquals(weatherService.getForecastUrl(jsonMissingForecast), "");
 
         // Test case with missing "properties" object
         String jsonMissingProperties = "{ \"otherProperty\": \"someValue\" }";
-        assertEquals(weatherService.getForcastUrl(jsonMissingProperties), "");
+        assertEquals(weatherService.getForecastUrl(jsonMissingProperties), "");
 
         // Test case with invalid JSON
         String invalidJson = "{ \"properties\": { \"forecast\": \"https://api.weather.gov/gridpoints/BOU/62,61/forecast\" ";
-        assertEquals(weatherService.getForcastUrl(invalidJson), "");
+        assertEquals(weatherService.getForecastUrl(invalidJson), "");
     }
 
     @Test
-    public void testBuildWeeklyForcastHighLowJson() {
+    public void testBuildWeeklyForecastHighLowJson() {
         // Input JSON data with periods containing name and temperature properties
         String inputJson = "{ \"properties\": { \"periods\": [ { \"name\": \"Monday\", \"temperature\": 80 }, { \"name\": \"Tuesday\", \"temperature\": 75 } ] } }";
 
@@ -76,7 +76,7 @@ public class WeatherServiceTest {
         expectedJson.put("periods", expectedPeriods);
 
         // Test the method with the input JSON
-        JSONObject actualJson = weatherService.buildWeeklyForcastHighLowJson(inputJson);
+        JSONObject actualJson = weatherService.buildWeeklyForecastHighLowJson(inputJson);
 
         // Compare the expected and actual JSON
         assertEquals(actualJson.toString(), expectedJson.toString());
